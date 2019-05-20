@@ -182,24 +182,6 @@ $site->
 			setShow(true)->
 			setEditable(true)
 		)->
-		addProperty(
-			ImageProperty::create('photo')->
-			setTitle('Фотография')->
-			setResize(200, 200, 100)->
-			setShow(true)
-		)->
-        addProperty(
-			CheckboxProperty::create('activated')->
-			setTitle('Активирован')->
-			setShow(true)->
-			setEditable(true)
-		)->
-        addProperty(
-			CheckboxProperty::create('banned')->
-			setTitle('Заблокирован')->
-			setShow(true)->
-			setEditable(true)
-		)->
         addProperty(
 			OneToOneProperty::create('service_section_id')->
 			setTitle('Служебный раздел')->
@@ -218,12 +200,6 @@ $site->
 		Rubric::create('service_sections', 'Служебные разделы')->
 		bind([
 			Site::ROOT => 'App.ServiceSection'
-		])
-	)->
-	addRubric(
-		Rubric::create('dicts', 'Справочники')->
-		bind([
-			env('site.dicts', 'App.ServiceSection.3') => 'App.ServiceSection'
 		])
 	)->
 	addRubric(
