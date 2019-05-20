@@ -35,12 +35,20 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Moonlight\Middleware\QueryLogMiddleware::class,
         ],
 
         'api' => [
             'throttle:60,1',
             'bindings',
         ],
+
+        'plugins' => [
+            \Moonlight\Middleware\SessionNameMiddleware::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            \Moonlight\Middleware\AuthMiddleware::class,
+        ],    
     ];
 
     /**

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Moonlight\Utils\ErrorMessage;
 
 class Handler extends ExceptionHandler
 {
@@ -35,6 +36,14 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         parent::report($exception);
+
+        if ($this->shouldReport($exception)) {
+            try {
+                ErrorMessage::send($exception);
+            } catch (\Exception $e) {
+                parent::report($e);
+            }
+        }
     }
 
     /**
@@ -46,6 +55,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($this->isHttpException($exception)) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Страница не найдена.']);
+            }
+    
+            return response()->view('errors.404', [], 404);
+        } elseif ($this->shouldReport($exception)) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => $exception->getMessage()]);
+            }
+
+            if (config('app.debug')) {
+                return parent::render($request, $exception);
+            }
+
+            return response()->view('errors.500', ['exception' => $exception], 500);
+        } elseif ($exception instanceof TokenMismatchException) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Данные формы устарели.']);
+            }
+
+            return redirect()->route('welcome');
+        }
+
         return parent::render($request, $exception);
     }
 }

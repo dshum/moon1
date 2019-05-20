@@ -56,9 +56,14 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'denis@moon1.ru'),
+        'name' => env('MAIL_FROM_NAME', 'Denis Shumeev'),
     ],
+
+    'buglover' => [
+        'address' => env('MAIL_BUGLOVER_ADDRESS', 'denis-shumeev@yandex.ru'),
+        'name' => env('MAIL_BUGLOVER_NAME', 'Moonlight Buglover'),
+    ],    
 
     /*
     |--------------------------------------------------------------------------

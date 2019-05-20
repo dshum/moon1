@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Moscow',
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -165,6 +165,9 @@ return [
         /*
          * Package Service Providers...
          */
+
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Moonlight\MoonlightServiceProvider::class,
 
         /*
          * Application Service Providers...
