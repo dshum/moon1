@@ -166,9 +166,6 @@ return [
          * Package Service Providers...
          */
 
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Moonlight\MoonlightServiceProvider::class,
-
         /*
          * Application Service Providers...
          */
