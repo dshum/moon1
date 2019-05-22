@@ -194,7 +194,51 @@ $site->
 		addSoftDeletes()
 	)->
 
+	/*
+	 * Сообщение
+	 */
+
+	addItem(
+		Item::create('App\Message')->
+		setTitle('Сообщение')->
+        addOrderBy('created_at', 'desc')->
+		addProperty(
+			MainProperty::create('name')->
+			setTitle('Название')
+		)->
+		addProperty(
+			TextareaProperty::create('message')->
+			setTitle('Текст сообщения')->
+			setRequired(true)->
+			setShow(true)
+		)->
+		addProperty(
+			TextfieldProperty::create('face')->
+			setTitle('Имя')->
+			setRequired(true)->
+			setShow(true)
+		)->
+        addProperty(
+			TextfieldProperty::create('email')->
+			setTitle('E-mail')->
+			addRule('email', 'Некорректный адрес электронной почты')->
+			setRequired(true)->
+			setShow(true)
+		)->
+        addProperty(
+			OneToOneProperty::create('service_section_id')->
+			setTitle('Служебный раздел')->
+			setRelatedClass('App\ServiceSection')->
+			setRequired(true)->
+			setParent(true)->
+            setOpenItem(true)
+		)->
+		addTimestamps()->
+		addSoftDeletes()
+	)->
+
 	bind(Site::ROOT, ['App.Section', 'App.ServiceSection', 'App.SiteSettings'])->
+	bind('App.ServiceSection.2', 'App.Message')->
 
 	addRubric(
 		Rubric::create('service_sections', 'Служебные разделы')->
@@ -202,9 +246,11 @@ $site->
 			Site::ROOT => 'App.ServiceSection'
 		])
 	)->
+	/*
 	addRubric(
 		Rubric::create('site_settings', 'Настройки сайта')->
 		bind('App.SiteSettings')
 	)->
+	*/
 
 	end();
