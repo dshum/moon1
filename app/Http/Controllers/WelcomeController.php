@@ -14,26 +14,32 @@ class WelcomeController extends Controller
 {
     public function message(Request $request)
     {
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        try {
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
 
-        $data = [
-            'secret' => config('services.recaptcha.secret'),
-            'response' => $request->recaptcha,
-        ];
+            $data = [
+                'secret' => config('services.recaptcha.secret'),
+                'response' => $request->recaptcha,
+            ];
 
-        $options = [
-            'http' => [
-                'header' => 'Content-type: application/x-www-form-urlencoded',
-                'method' => 'POST',
-                'content' => http_build_query($data),
-            ]
-        ];
+            $options = [
+                'http' => [
+                    'header' => 'Content-type: application/x-www-form-urlencoded',
+                    'method' => 'POST',
+                    'content' => http_build_query($data),
+                ]
+            ];
 
-        $context = stream_context_create($options);
-        $result = file_get_contents($url, false, $context);
-        $resultJson = json_decode($result);
+            $context = stream_context_create($options);
+            $result = file_get_contents($url, false, $context);
+            $resultJson = json_decode($result);
 
-        if ($resultJson->success !== true) {
+            if ($resultJson->success !== true) {
+                return redirect()->back()->with('error', 'recaptcha');
+            }
+        } catch (ErrorException $e) {
+            ErrorMessage::send($e);
+
             return redirect()->back()->with('error', 'recaptcha');
         }
 
