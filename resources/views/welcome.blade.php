@@ -3,8 +3,18 @@
 @section('title', 'Moon1')
 
 @section('content')
+<script src="https://www.google.com/recaptcha/api.js?render={{ $key }}"></script>
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute("{{ $key }}", {action: 'homepage'}).then(function(token) {
+        $('form[name="messageForm"] input[name="recaptcha"]').val(token);
+    });
+});
+</script>
 <h2>Обратная связь</h2>
-@if ($errors->any())
+@if (session('error') == 'recaptcha')
+<p class="fail">Похоже, вы робот.<p>
+@elseif ($errors->any())
 <p class="fail">
 @foreach ($errors->all() as $error)
 {{ $error }}<br>
@@ -15,6 +25,7 @@
 @endif
 <form name="messageForm" action="{{ route('message') }}" method="post">
 @csrf()
+<input type="hidden" name="recaptcha" value="">
 <p><label>Текст сообщения:</label><br>
 <textarea name="message" rows="10" class="@error('message') invalid @enderror">{{ old('message') }}</textarea></p>
 <p><label>Имя:</label><br>

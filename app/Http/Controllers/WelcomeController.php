@@ -14,6 +14,29 @@ class WelcomeController extends Controller
 {
     public function message(Request $request)
     {
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+
+        $data = [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $request->recaptcha,
+        ];
+
+        $options = [
+            'http' => [
+                'header' => 'Content-type: application/x-www-form-urlencoded',
+                'method' => 'POST',
+                'content' => http_build_query($data),
+            ]
+        ];
+
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        $resultJson = json_decode($result);
+
+        if ($resultJson->success !== true) {
+            return redirect()->back()->with('error', 'recaptcha');
+        }
+
         $request->validate([
             'message' => 'required',
             'face' => 'required',
@@ -52,6 +75,10 @@ class WelcomeController extends Controller
 
     public function index(Request $request)
     {
-        return view('welcome');
+        $key = config('services.recaptcha.key');
+
+        return view('welcome', [
+            'key' => $key,
+        ]);
     }
 }

@@ -20,6 +20,18 @@ div.content {
     font-size: 1rem;
 }
 
+div.footer {
+    width: 44rem;
+    margin: 2rem auto;
+    padding: 0;
+    font-size: 0.9rem;
+    color: slategray;
+}
+
+div.footer a {
+    color: royalblue;
+}
+
 input[type="text"],
 textarea {
     width: 20rem;
@@ -100,4 +112,8 @@ input[type="text"].invalid,
 textarea.invalid {
     border-color: tomato;
     background-color: lavenderblush;
+}
+
+.grecaptcha-badge {
+    visibility: hidden;
 }
