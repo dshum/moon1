@@ -19,7 +19,7 @@ class WelcomeController extends Controller
 
             $data = [
                 'secret' => config('services.recaptcha.secret'),
-                'response' => $request->recaptcha,
+                'response' => $request->input('g-recaptcha-response'),
             ];
 
             $options = [
@@ -75,7 +75,7 @@ class WelcomeController extends Controller
 
             DB::rollBack();
         }
-        
+
         return redirect()->back()->with('status', 'sent');
     }
 
