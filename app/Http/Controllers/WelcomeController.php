@@ -21,7 +21,7 @@ class WelcomeController extends Controller
 
             $data = [
                 'secret' => config('services.recaptcha.secret'),
-                'response' => $request->input('g-recaptcha-response'),
+                'response' => $request->recaptcha,
             ];
 
             $options = [
@@ -43,7 +43,8 @@ class WelcomeController extends Controller
         } catch (Exception $e) {
             ErrorMessage::send($e);
 
-            return redirect()->back()->with('error', 'recaptcha');
+            $recaptchaResponse = 'error';
+            // return redirect()->back()->with('error', 'recaptcha');
         }
 
         $request->validate([
