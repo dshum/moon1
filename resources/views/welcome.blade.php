@@ -2,6 +2,10 @@
 
 @section('title', 'Moon1')
 
+@push('scripts')
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endpush
+
 @section('content')
     <script src="https://www.google.com/recaptcha/api.js?render={{ $key }}"></script>
     <script>

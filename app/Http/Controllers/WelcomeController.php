@@ -21,7 +21,7 @@ class WelcomeController extends Controller
 
             $data = [
                 'secret' => config('services.recaptcha.secret'),
-                'response' => $request->recaptcha,
+                'response' => $request->input('g-recaptcha-response'),
             ];
 
             $options = [
