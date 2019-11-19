@@ -25,7 +25,7 @@ use Moonlight\Properties\VirtualProperty;
 $site = \App::make('site');
 
 $site->
-    
+
     /*
 	 * Раздел сайта
 	 */
@@ -147,7 +147,7 @@ $site->
 		addTimestamps()->
 		addSoftDeletes()
 	)->
-    
+
     /*
 	 * Пользователь
 	 */
@@ -225,6 +225,16 @@ $site->
 			setRequired(true)->
 			setShow(true)
 		)->
+        addProperty(
+            TextfieldProperty::create('recaptcha_response')->
+            setTitle('Recaptcha')->
+            setShow(true)
+        )->
+        addProperty(
+            TextfieldProperty::create('ip')->
+            setTitle('IP')->
+            setShow(true)
+        )->
         addProperty(
 			OneToOneProperty::create('service_section_id')->
 			setTitle('Служебный раздел')->

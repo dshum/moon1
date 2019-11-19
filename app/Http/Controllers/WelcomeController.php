@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Moonlight\Utils\ErrorMessage;
 use App\Mail\FeedbackMessage;
 use App\Message;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Moonlight\Utils\ErrorMessage;
 
 class WelcomeController extends Controller
 {
     public function message(Request $request)
     {
+        $recaptchaResponse = 'success';
+
         try {
             $url = 'https://www.google.com/recaptcha/api/siteverify';
 
@@ -27,7 +29,7 @@ class WelcomeController extends Controller
                     'header' => 'Content-type: application/x-www-form-urlencoded',
                     'method' => 'POST',
                     'content' => http_build_query($data),
-                ]
+                ],
             ];
 
             $context = stream_context_create($options);
@@ -35,9 +37,10 @@ class WelcomeController extends Controller
             $resultJson = json_decode($result);
 
             if ($resultJson->success !== true) {
-                return redirect()->back()->with('error', 'recaptcha');
+                $recaptchaResponse = 'fail';
+                // return redirect()->back()->with('error', 'recaptcha');
             }
-        } catch (ErrorException $e) {
+        } catch (Exception $e) {
             ErrorMessage::send($e);
 
             return redirect()->back()->with('error', 'recaptcha');
@@ -60,6 +63,8 @@ class WelcomeController extends Controller
         $message->face = $request->input('face');
         $message->email = $request->input('email');
         $message->message = $request->input('message');
+        $message->recaptcha_response = $recaptchaResponse;
+        $message->ip = $request->ip();
         $message->service_section_id = 2;
 
         DB::beginTransaction();
@@ -70,12 +75,12 @@ class WelcomeController extends Controller
             Mail::send(new FeedbackMessage($message));
 
             DB::commit();
-        } catch (ErrorException $e) {
+        } catch (Exception $e) {
             ErrorMessage::send($e);
 
             DB::rollBack();
         }
-        
+
         return redirect()->back()->with('status', 'sent');
     }
 
