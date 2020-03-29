@@ -16,7 +16,7 @@ use Moonlight\Properties\IntegerProperty;
 use Moonlight\Properties\OneToOneProperty;
 use Moonlight\Properties\ManyToManyProperty;
 use Moonlight\Properties\PasswordProperty;
-use Moonlight\Properties\RichtextProperty;
+use Moonlight\Properties\TinymceProperty;
 use Moonlight\Properties\TextareaProperty;
 use Moonlight\Properties\TextfieldProperty;
 use Moonlight\Properties\PluginProperty;
@@ -73,7 +73,7 @@ $site->
 			setEditable(true)
 		)->
 		addProperty(
-			RichtextProperty::create('fullcontent')->
+			TinymceProperty::create('fullcontent')->
 			setTitle('Текст раздела')
 		)->
         addProperty(

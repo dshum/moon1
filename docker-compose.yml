@@ -1,0 +1,38 @@
+version: "3.3"
+
+services:
+  redis:
+    container_name: moon1_redis
+    image: redis:latest
+    ports:
+     - 63791:6379
+  postgres:
+    container_name: moon1_postgres
+    image: postgres:latest
+    ports:
+      - 54321:5432
+    environment:
+      - POSTGRES_DB=moon1
+      - POSTGRES_USER=karl
+      - POSTGRES_PASSWORD=secret
+  nginx:
+    container_name: moon1_nginx
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - 8081:80
+    volumes:
+      - ./:/var/www
+    links:
+      - php-fpm
+  php-fpm:
+    container_name: moon1_php
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    volumes:
+      - ./:/var/www
+    links:
+      - redis
+      - postgres
